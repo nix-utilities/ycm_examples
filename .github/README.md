@@ -18,7 +18,6 @@ Nix modules based on
 - [:building_construction: Requirements][heading__requirements]
 - [:zap: Quick Start][heading__quick_start]
 - [&#x1F9F0; Usage][heading__usage]
-- [&#x1F5D2; Notes][heading__notes]
 - [:chart_with_upwards_trend: Contributing][heading__contributing]
   - [:trident: Forking][heading__forking]
   - [:currency_exchange: Sponsor][heading__sponsor]
@@ -255,6 +254,21 @@ utils.mkModule rec {
   };
 }
 ```
+
+> Notes about configurations;
+>
+> - `lspConfig.ycm-lsp-server` attribute set will be appended to VimRC file's
+>   `g:ycm_language_server` list value, check;
+>   - [`ycm-core/lsp-examples` -- Configuration](https://github.com/ycm-core/lsp-examples/?tab=readme-ov-file#configuration)
+>     for additional details and valid values.
+>   - `:help g:ycm_language_server` for Vim documentation
+>
+> - `lspConfig.ycm_extra_conf.settings` will be inserted within the resulting
+>   `Settings` function definition, and file path will appended to VimRC file's
+>   `g:ycm_global_ycm_extra_conf` value, check;
+>   - [`ycm-core/ycmd` -- `examples/.ycm_extra_conf.py`](https://github.com/ycm-core/ycmd/blob/67308a61b1433f22124f0378dbee5d3a76349619/examples/.ycm_extra_conf.py)
+>     for examples
+>   - `:help g:ycm_global_ycm_extra_conf` for Vim documentation
 
 - Add to the `imports` list within `default.nix`
 
