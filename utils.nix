@@ -34,17 +34,11 @@ rec {
     ycm-lsp-server = mkOption {
       description = "Check the Configuration section of -- https://github.com/ycm-core/lsp-examples";
 
-      /**
-        WARN: this will break if/when values contain Vim primitives not compatible with JSON primitives
-
-        - `v:true` vs `true`
-        - `v:false` vs `false`
-        - `v:null` vs `null`
-      */
-      apply = attrs: builtins.toJSON (lib.filterAttrs (n: v:
-        (lib.typeOf v == "list" && lib.length v > 0)
-        || (lib.typeOf v == "string" && lib.stringLength v > 0)
-        || (n == "port" && v != null)
+      apply = attrs: convertTo.vim.dictFromAttrs (lib.filterAttrs (n: v:
+        with lib; (isList v && length v > 0)
+          || (isString v && stringLength v > 0)
+          || (isAttrs v && length (attrNames v) > 0)
+          || (n == "port" && v != null)
       ) attrs);
 
       example = ''
@@ -132,7 +126,6 @@ rec {
           capabilities = with lib.types; mkOption {
             default = {};
             type = attrs;
-            apply = convertTo.vim.dictFromAttrs;
             description = ''
               (dict, optional): If supplied, this is a dictionary that is
               merged with the LSP client capabilities reported to the language
