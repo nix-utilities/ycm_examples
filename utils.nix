@@ -243,12 +243,12 @@ rec {
     */
     python = rec {
       dictFromAttrs = with lib; attrs:
-        builtins.concatStringsSep "," (
+        "{${builtins.concatStringsSep "," (
           attrValues (
             attrsets.mapAttrs (name: value:
-              ''{"${name}":${valueFrom value}}''
+              ''"${name}":${valueFrom value}''
             ) attrs)
-          );
+          )}}";
 
       boolianFrom = value:
         if value then "True"
@@ -279,12 +279,12 @@ rec {
     */
     vim = rec {
       dictFromAttrs = with lib; attrs:
-        builtins.concatStringsSep "," (
+        "{${builtins.concatStringsSep "," (
           attrValues (
             attrsets.mapAttrs (name: value:
-              ''{"${name}":${valueFrom value}}''
+              ''"${name}":${valueFrom value}''
             ) attrs)
-          );
+          )}}";
 
       boolianFrom = value:
         if value then "v:true"
