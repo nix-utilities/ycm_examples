@@ -25,7 +25,7 @@
 */
 {
   lib,
-  pkgs ? (import /home/s0ands0/git/hub/NixOS/nixpkgs {}).pkgs,
+  pkgs,
   config,
   ...
 }:

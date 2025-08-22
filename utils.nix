@@ -6,8 +6,8 @@
   https://nixos.org/manual/nixos/stable/index.html#sec-writing-modules
 */
 {
-  lib ? (import /home/s0ands0/git/hub/NixOS/nixpkgs {}).lib,
-  pkgs ? (import /home/s0ands0/git/hub/NixOS/nixpkgs {}).pkgs,
+  lib,
+  pkgs,
 }:
 let
   ## TODO: maybe consider bringing other dependencies into scope?

@@ -1,11 +1,12 @@
 ## "POST /run_completer_command HTTP/1.1" 500
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   ...
 }:
 let
-  utils = import ../utils.nix {};
+  utils = import ../utils.nix { inherit lib pkgs; };
 in
 utils.mkModule rec {
   inherit config pkgs;

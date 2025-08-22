@@ -1,11 +1,12 @@
 ## Errors
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   ...
 }:
 let
-  utils = import ../utils.nix {};
+  utils = import ../utils.nix { inherit lib pkgs; };
 in
 utils.mkModule rec {
   inherit config pkgs;
