@@ -1,37 +1,15 @@
-/**
-
-  ```nix
-  {
-    config,
-    lib,
-    ...
-  }:
-  let
-    ycm_examples = import /home/s0ands0/git/hub/nix-utilities/ycm_examples {
-      inherit config lib;
-    };
-  in
-  {
-    imports = [
-      ycm_examples
-    ];
-
-    config.services.ycm_examples.servers = with config.services.ycm_examples; [
-      vim-language-server
-      # ...
-    ];
-  }
-  ```
-*/
 {
   lib,
+  ## TODO: investigate why home-manager doesn't seem to pass `pkgs`
   pkgs,
   config,
   ...
 }:
 let
   service = "ycm_examples";
+
   cfg = config.services.ycm_examples;
+
   utils = import ./utils.nix { inherit lib pkgs; };
 
   list_ycm_extra_conf_attrs = builtins.filter (x:
@@ -69,7 +47,6 @@ in
       default = lib.concatStringsSep "," (builtins.map (x: x.ycm-lsp-server) cfg.enabled);
     };
 
-    ## TODO: Figure out why this is not writing to Nix store
     ycm_extra_conf = lib.mkOption {
       description = "Path of `.ycm_extra_conf.py` file";
       type = lib.types.pathInStore;

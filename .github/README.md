@@ -295,6 +295,9 @@ ______
 
 
 - [GitHub -- `github-utilities/make-readme`](https://github.com/github-utilities/make-readme)
+- [Home Manager -- Writing Modules](https://home-manager.dev/manual/24.11/index.xhtml#ch-writing-modules)
+- [NixOS Manual -- Writing Modules](https://nixos.org/manual/nixos/stable/index.html#sec-writing-modules)
+- [NixOS Wiki -- NixOS Modules](https://nixos.wiki/wiki/NixOS_modules)
 
 
 ______
