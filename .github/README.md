@@ -1,4 +1,4 @@
-# Ycm_examples
+# YCM Examples
 [heading__top]:
   #ycm_examples
   "&#x2B06; Nix modules based on `ycm-core/lsp-examples` from GitHub"
@@ -85,9 +85,53 @@ ______
   "&#x1F9F0; How to utilize this repository"
 
 
-Import
+### Optional if using Home Manager with system flake
 
-> `configuration.nix` **(snipet)**
+Pass system level `pkgs` through Home-Manager `extraSpecialArgs`
+
+`flake.nix` **(snippet)**
+
+```nix
+{
+  description = "System wide flake";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  outputs = { self, home-manager, nixpkgs, ... }@attrs:
+  let
+    hostname = "nixos";
+    system = "x86_64-linux";
+  in
+  {
+    nixosConfigurations."${hostname}" = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = attrs;
+      modules = [
+        ./configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = with attrs; {
+            inherit nixpkgs;
+            pkgs = nixpkgs.legacyPackages.${system};
+          };
+        }
+      ];
+    };
+  };
+}
+```
+
+---
+
+### Import as a configuration module
+
+> `configuration.nix` **(snippet)**
 
 ```nix
 { config, lib, pkgs, nixpkgs, ... }:
@@ -112,6 +156,12 @@ Then rebuild as usual;
 
 ```bash
 sudo nixos-rebuild switch
+```
+
+...  note if using a `flake.nix` then instead of above, then use following;
+
+```bash
+nixos-rebuild switch --flake .
 ```
 
 
