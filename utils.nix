@@ -10,8 +10,34 @@
   pkgs,
 }:
 let
-  ## TODO: maybe consider bringing other dependencies into scope?
-  inherit (lib) mkOption;
+  inherit (lib)
+    attrNames
+    attrValues
+    concatStringsSep
+    filterAttrs
+    isAttrs
+    isBool
+    isInt
+    isFloat
+    isList
+    isPath
+    isStorePath
+    isString
+    length
+    mapAttrs
+    mkDefault
+    # mkIf
+    mkOption
+    remove
+    splitString
+    stringLength
+    typeOf
+    types
+    ;
+
+  inherit (pkgs.writers)
+    writePython3Bin
+    ;
 in
 rec {
   /**
@@ -21,7 +47,7 @@ rec {
     enable = mkOption {
       default = false;
       description = "Enable or disable";
-      type = lib.types.bool;
+      type = types.bool;
     };
 
     /**
@@ -34,8 +60,8 @@ rec {
     ycm-lsp-server = mkOption {
       description = "Check the Configuration section of -- https://github.com/ycm-core/lsp-examples";
 
-      apply = attrs: convertTo.vim.dictFromAttrs (lib.filterAttrs (n: v:
-        with lib; (isList v && length v > 0)
+      apply = attrs: convertTo.vim.dictFromAttrs (filterAttrs (n: v:
+        (isList v && length v > 0)
           || (isString v && stringLength v > 0)
           || (isAttrs v && length (attrNames v) > 0)
           || (n == "port" && v != null)
@@ -71,9 +97,9 @@ rec {
         ```
       '';
 
-      type = lib.types.submodule {
+      type = with types; types.submodule {
         options = {
-          name = with lib.types; mkOption {
+          name = mkOption {
             type = nonEmptyStr;
             description = ''
               (string, mandatory): When configuring a LSP server the value of
@@ -82,7 +108,7 @@ rec {
             '';
           };
 
-          filetypes = with lib.types; mkOption {
+          filetypes = mkOption {
             type = listOf nonEmptyStr;
             description = ''
               (list of string, mandatory): List of Vim filetypes this server
@@ -90,7 +116,7 @@ rec {
             '';
           };
 
-          cmdline = with lib.types; mkOption {
+          cmdline = mkOption {
             default = [];
             type = listOf nonEmptyStr;
             description = ''
@@ -101,7 +127,7 @@ rec {
             '';
           };
 
-          port = with lib.types; mkOption {
+          port = mkOption {
             default = null;
             type = nullOr port;
             # type = nullOr (numbers.between 1 65535);
@@ -113,7 +139,7 @@ rec {
           };
 
 
-          project_root_files = with lib.types; mkOption {
+          project_root_files = mkOption {
             default = [];
             type = listOf nonEmptyStr;
             description = ''
@@ -123,7 +149,7 @@ rec {
             '';
           };
 
-          capabilities = with lib.types; mkOption {
+          capabilities = mkOption {
             default = {};
             type = attrs;
             description = ''
@@ -141,11 +167,11 @@ rec {
     ycm_extra_conf = mkOption {
       description = "Components of `.ycm_extra_conf.py` file";
       default = {};
-      type = lib.types.submodule {
+      type = types.submodule {
         options = {
           settings = mkOption {
             description = "Insert within the Python `Settings` function that YCM calls from `.ycm_extra_conf.py`";
-            type = lib.types.nullOr lib.types.lines;
+            type = types.nullOr types.lines;
             default = null;
             example = ''
               ## Set branch for Astro to load TypeScript configurations
@@ -196,11 +222,11 @@ rec {
           ];
         }
       }:
-      pkgs.writers.writePython3Bin name args ''
+      writePython3Bin name args ''
         def Settings( **kwargs ):
-        ${lib.concatStringsSep "\n" (builtins.map (x:
+        ${concatStringsSep "\n" (builtins.map (x:
         "    ${x}"
-        ) (lib.remove "" (lib.splitString "\n" settings)))}
+        ) (remove "" (splitString "\n" settings)))}
       '';
 
     };
@@ -235,10 +261,10 @@ rec {
       ```
     */
     python = rec {
-      dictFromAttrs = with lib; attrs:
+      dictFromAttrs = attrs:
         "{${builtins.concatStringsSep "," (
           attrValues (
-            attrsets.mapAttrs (name: value:
+            mapAttrs (name: value:
               ''"${name}":${valueFrom value}''
             ) attrs)
           )}}";
@@ -250,17 +276,17 @@ rec {
 
       listFrom = value:
         "[${builtins.concatStringsSep "," (
-          builtins.map (x: valueFrom x) value
+          map (x: valueFrom x) value
         )}]";
 
-      valueFrom = with lib; value:
+      valueFrom = value:
         if isAttrs value then "${dictFromAttrs value}"
         else if isBool value then "${boolianFrom value}"
         else if isList value then "${listFrom value}"
         else if isString value then ''"${value}"''
-        else if isPath value then ''"${builtins.toString value}"''
+        else if isPath value then ''"${toString value}"''
         else if isStorePath value then ''"${builtins.toStorePath value}"''
-        else if (isFloat value || isInt value) then "${builtins.toString value}"
+        else if (isFloat value || isInt value) then "${toString value}"
         else if typeOf value == "null" then "None"
         else throw "Unexpected type: value -> '${value}' | type -> ${typeOf value}"
         ;
@@ -270,8 +296,8 @@ rec {
       Nearly identical to `convertTo.python` but for boolean and null requiring
       special attention
     */
-    vim = rec {
-      dictFromAttrs = with lib; attrs:
+    vim = with lib; rec {
+      dictFromAttrs = attrs:
         "{${builtins.concatStringsSep "," (
           attrValues (
             attrsets.mapAttrs (name: value:
@@ -289,7 +315,7 @@ rec {
           builtins.map (x: valueFrom x) value
         )}]";
 
-      valueFrom = with lib; value:
+      valueFrom = value:
         if isAttrs value then "${dictFromAttrs value}"
         else if isBool value then "${boolianFrom value}"
         else if isList value then "${listFrom value}"
@@ -353,12 +379,12 @@ rec {
       inherit (options) enable ycm-lsp-server ycm_extra_conf;
     } // lspOptions;
 
-    # config.services.${service}.${name} = lib.mkIf cfg.enable {
-    #   enable = lib.mkDefault false;
+    # config.services.${service}.${name} = mkIf cfg.enable {
+    #   enable = mkDefault false;
     # } // lspConfig;
     ## TODO: swap below for above when infinite recursion errors are sorted
     config.services.${service}.${name} = {
-      enable = lib.mkDefault false;
+      enable = mkDefault false;
     } // lspConfig;
   };
 }
