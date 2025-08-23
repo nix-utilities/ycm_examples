@@ -134,7 +134,13 @@ Pass system level `pkgs` through Home-Manager `extraSpecialArgs`
 > `configuration.nix` **(snippet)**
 
 ```nix
-{ config, lib, pkgs, nixpkgs, ... }:
+{
+  config,
+  lib,
+  nixpkgs,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -162,6 +168,80 @@ sudo nixos-rebuild switch
 
 ```bash
 nixos-rebuild switch --flake .
+```
+
+---
+
+### Experimental use as flake input with home-manager
+
+
+`flake.nix` **(diff)**
+
+```diff
+ {
+   description = "System wide flake";
+
+   inputs = {
+     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+     home-manager.url = "github:nix-community/home-manager";
+     home-manager.inputs.nixpkgs.follows = "nixpkgs";
++    ycm_examples.url = "github:nix-utilities/ycm_examples?ref=main";
+   };
+ 
+   outputs = { self, home-manager, nixpkgs, ... }@attrs:
+   let
+     hostname = "nixos";
+     system = "x86_64-linux";
+   in
+   {
+     nixosConfigurations."${hostname}" = nixpkgs.lib.nixosSystem {
+       inherit system;
+       specialArgs = attrs;
+       modules = [
+         ./configuration.nix
+         home-manager.nixosModules.home-manager
+         {
+           home-manager.useGlobalPkgs = true;
+           home-manager.useUserPackages = true;
+           home-manager.extraSpecialArgs = with attrs; {
+-            inherit nixpkgs;
++            inherit nixpkgs ycm_examples;
+             pkgs = nixpkgs.legacyPackages.${system};
+           };
+         }
+       ];
+     };
+   };
+ }
+```
+
+> `configuration.nix` **(diff)**
+
+```diff
+ {
+   config,
+   lib,
+   nixpkgs,
+   pkgs,
++  ycm_examples
+   ...
+ }:
+
+ {
+   imports = [
+-    (import /home/your-name/git/hub/nix-utilities/ycm_examples {
++    (import ycm_examples {
+       inherit config lib pkgs;
+     })
+   ];
+ 
+   config.services.ycm_examples.servers = with config.services.ycm_examples; [
+     nil
+     pest-ide-tools
+     vim-language-server
+     # ...
+   ];
+ }
 ```
 
 
