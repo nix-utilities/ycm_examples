@@ -21,6 +21,7 @@ Nix modules based on
 - [:chart_with_upwards_trend: Contributing][heading__contributing]
   - [:trident: Forking][heading__forking]
   - [:currency_exchange: Sponsor][heading__sponsor]
+- [:ballot_box_with_check: Status of LSP testing][heading__status_of_lsp_testing]
 - [:card_index: Attribution][heading__attribution]
 - [:balance_scale: Licensing][heading__license]
 
@@ -347,6 +348,25 @@ Regardless of if you're able to financially support projects such as
 ycm_examples that nix-utilities maintains, please consider sharing projects
 that are useful with others, because one of the goals of maintaining Open
 Source repositories is to provide value to the community.
+
+
+______
+
+
+## Status of LSP testing
+[heading__status_of_lsp_testing]: #status-of-lsp-testing
+
+
+- `./astro-language-server` timeout, even after adding `ycm_extra_conf.conf` entry
+- `./awk-language-server` error, `"POST /run_completer_command HTTP/1.1" 500`
+- `./bash-language-server` **works**
+- `./docker-language-server` error, `"POST /run_completer_command HTTP/1.1" 500`
+- `./erlang-ls` **works**
+- `./haskell-language-server` error
+- `./nil` **works** though may slow-down initial load
+- `./pest` **works**
+- `./postgres-lsp` error
+- `./vim-language-server` **works**
 
 
 ______

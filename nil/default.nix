@@ -1,4 +1,3 @@
-## Slow to load but sorta works
 {
   config,
   lib,
