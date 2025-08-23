@@ -362,11 +362,13 @@ ______
 - `./bash-language-server` **works**
 - `./docker-language-server` error, `"POST /run_completer_command HTTP/1.1" 500`
 - `./erlang-ls` **works**
-- `./haskell-language-server` error
+- `./haskell-language-server` error, may need investigation by Haskell expert
 - `./nil` **works** though may slow-down initial load
 - `./pest` **works**
-- `./postgres-lsp` error
+- `./postgres-lsp` error, might need Docker or other dependencies injected
 - `./vim-language-server` **works**
+- `./vscode-css-languageserver` **works**
+- `./vscode-json-languageserver` no errors or server rejections but doesn't seem to do anything
 
 
 ______
