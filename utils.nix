@@ -11,7 +11,6 @@
 }:
 let
   inherit (lib)
-    attrNames
     attrValues
     concatStringsSep
     filterAttrs
@@ -63,7 +62,7 @@ rec {
       apply = attrs: convertTo.vim.dictFromAttrs (filterAttrs (n: v:
         (isList v && length v > 0)
           || (isString v && stringLength v > 0)
-          || (isAttrs v && length (attrNames v) > 0)
+          || (isAttrs v && v != { })
           || (n == "port" && v != null)
       ) attrs);
 
