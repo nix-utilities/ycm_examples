@@ -1,4 +1,3 @@
-## "POST /run_completer_command HTTP/1.1" 500
 {
   config,
   lib,
@@ -17,7 +16,7 @@ utils.mkModule rec {
     ycm-lsp-server = {
       name = "docker";
       filetypes = [ "dockerfile" ];
-      cmdline = [ "${pkgs.docker-language-server}/bin/${name}" "--stdio" ];
+      cmdline = [ "${pkgs.docker-language-server}/bin/${name}" "start" "--stdio" ];
     };
   };
 }
