@@ -15,7 +15,7 @@ utils.mkModule rec {
 
   lspConfig = {
     ycm-lsp-server = {
-      inherit name;
+      name = "awk";
       filetypes = [ "awk" ];
       cmdline = [ "${pkgs.awk-language-server}/bin/${name}" ];
     };

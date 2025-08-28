@@ -14,7 +14,7 @@ utils.mkModule rec {
 
   lspConfig = {
     ycm-lsp-server = {
-      inherit name;
+      name = "json";
       filetypes = [ "json" ];
       cmdline = [ "${pkgs.vscode-json-languageserver}/bin/${name}" "--stdio" ];
       capabilities.textDocument.completion.completionItem.snippetSupport = true;

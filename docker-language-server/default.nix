@@ -15,7 +15,7 @@ utils.mkModule rec {
 
   lspConfig = {
     ycm-lsp-server = {
-      inherit name;
+      name = "docker";
       filetypes = [ "dockerfile" ];
       cmdline = [ "${pkgs.docker-language-server}/bin/${name}" "--stdio" ];
     };

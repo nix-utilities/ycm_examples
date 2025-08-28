@@ -316,7 +316,7 @@ utils.mkModule rec {
 
   lspConfig = {
     ycm-lsp-server = {
-      inherit name;
+      name = "astro";
       filetypes = [ "astro" ];
       cmdline = [ "${pkgs.astro-language-server}/bin/astro-ls" "--stdio" ];
       project_root_files = [ "tsconfig.json" "astro.config.mjs" ];
@@ -350,6 +350,12 @@ utils.mkModule rec {
 >   - [`ycm-core/ycmd` -- `examples/.ycm_extra_conf.py`](https://github.com/ycm-core/ycmd/blob/67308a61b1433f22124f0378dbee5d3a76349619/examples/.ycm_extra_conf.py)
 >     for examples
 >   - `:help g:ycm_global_ycm_extra_conf` for Vim documentation
+>
+> **Warnings**
+>
+> - `lspConfig.ycm-lsp-server.name` **MUST** match the value that Vim reports
+>   via `:echo &filetype` in order for YouCompleteMe to load correct settings
+>   from `ycm_extra_conf.py`
 
 - Add to the `imports` list within `default.nix`
 

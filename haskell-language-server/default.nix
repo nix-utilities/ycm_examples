@@ -15,7 +15,7 @@ utils.mkModule rec {
 
   lspConfig = {
     ycm-lsp-server = {
-      inherit name;
+      name = "haskell";
       filetypes = [ "haskell" ];
       cmdline = [ "${pkgs.haskell-language-server}/bin/${name}" "--lsp" ];
       project_root_files = [ "stack.yaml" "cabal.project" "package.yaml" "hie.yaml" ];

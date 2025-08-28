@@ -14,7 +14,7 @@ utils.mkModule rec {
 
   lspConfig = {
     ycm-lsp-server = {
-      inherit name;
+      name = "bash";
       filetypes = [ "sh" ];
       cmdline = [ "${pkgs.bash-language-server}/bin/${name}" "start" ];
     };

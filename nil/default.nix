@@ -14,7 +14,7 @@ utils.mkModule rec {
 
   lspConfig = {
     ycm-lsp-server = {
-      inherit name;
+      name = "nix";
       filetypes = [ "nix" ];
       cmdline = [ "${pkgs.nil}/bin/${name}" "--stdio" ];
       project_root_files = [ "flake.nix" ];

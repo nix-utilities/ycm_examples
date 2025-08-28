@@ -14,7 +14,7 @@ utils.mkModule rec {
 
   lspConfig = {
     ycm-lsp-server = {
-      inherit name;
+      name = "pest";
       filetypes = [ "pest" ];
       cmdline = [ "${pkgs.pest-ide-tools}/bin/pest-language-server" ];
     };
