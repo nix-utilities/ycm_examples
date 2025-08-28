@@ -19,6 +19,17 @@ utils.mkModule rec {
       cmdline = [ "${pkgs.nil}/bin/${name}" "--stdio" ];
       project_root_files = [ "flake.nix" ];
     };
+
+    ycm_extra_conf.settings =
+      let
+        dict = utils.convertTo.python.dictFromAttrs {
+          ls.nil.formatting.command = ["nix" "fmt"];
+        };
+      in
+      ''
+        if kwargs[ 'language' ] == 'astro':
+            return ${dict}
+      '';
   };
 }
 
