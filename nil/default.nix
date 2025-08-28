@@ -27,7 +27,7 @@ utils.mkModule rec {
         };
       in
       ''
-        if kwargs[ 'language' ] == 'astro':
+        if kwargs[ 'language' ] == 'nix':
             return ${dict}
       '';
   };
