@@ -15,9 +15,14 @@ utils.mkModule rec {
   lspConfig = {
     ycm-lsp-server = {
       name = "css";
-      filetypes = [ "css" "sass" ];
-      cmdline = [ "${pkgs.vscode-css-languageserver}/bin/${name}" "--stdio" ];
+      filetypes = [
+        "css"
+        "sass"
+      ];
+      cmdline = [
+        "${pkgs.vscode-css-languageserver}/bin/${name}"
+        "--stdio"
+      ];
     };
   };
 }
-

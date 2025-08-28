@@ -40,7 +40,7 @@ let
 in
 rec {
   /**
-   Common options that may be applied to YCM third-party language server modules
+    Common options that may be applied to YCM third-party language server modules
   */
   options = {
     enable = mkOption {
@@ -59,12 +59,17 @@ rec {
     ycm-lsp-server = mkOption {
       description = "Check the Configuration section of -- https://github.com/ycm-core/lsp-examples";
 
-      apply = attrs: convertTo.vim.dictFromAttrs (filterAttrs (n: v:
-        (isList v && length v > 0)
-          || (isString v && stringLength v > 0)
-          || (isAttrs v && v != { })
-          || (n == "port" && v != null)
-      ) attrs);
+      apply =
+        attrs:
+        convertTo.vim.dictFromAttrs (
+          filterAttrs (
+            n: v:
+            (isList v && length v > 0)
+            || (isString v && stringLength v > 0)
+            || (isAttrs v && v != { })
+            || (n == "port" && v != null)
+          ) attrs
+        );
 
       example = ''
         ## Module snippet
@@ -96,76 +101,77 @@ rec {
         ```
       '';
 
-      type = with types; types.submodule {
-        options = {
-          name = mkOption {
-            type = nonEmptyStr;
-            description = ''
-              (string, mandatory): When configuring a LSP server the value of
-              the 'name' key will be used as the "kwargs[ 'language' ]". Can be
-              anything you like.
-            '';
-          };
+      type =
+        with types;
+        types.submodule {
+          options = {
+            name = mkOption {
+              type = nonEmptyStr;
+              description = ''
+                (string, mandatory): When configuring a LSP server the value of
+                the 'name' key will be used as the "kwargs[ 'language' ]". Can be
+                anything you like.
+              '';
+            };
 
-          filetypes = mkOption {
-            type = listOf nonEmptyStr;
-            description = ''
-              (list of string, mandatory): List of Vim filetypes this server
-              should be used for.
-            '';
-          };
+            filetypes = mkOption {
+              type = listOf nonEmptyStr;
+              description = ''
+                (list of string, mandatory): List of Vim filetypes this server
+                should be used for.
+              '';
+            };
 
-          cmdline = mkOption {
-            default = [];
-            type = listOf nonEmptyStr;
-            description = ''
-              (list of strings, optional): If supplied, the server is started
-              with this command line (each list element is a command line
-              word).  Typically, the server should be started with STDIO
-              communication. If not supplied, 'port' must be supplied.
-            '';
-          };
+            cmdline = mkOption {
+              default = [ ];
+              type = listOf nonEmptyStr;
+              description = ''
+                (list of strings, optional): If supplied, the server is started
+                with this command line (each list element is a command line
+                word).  Typically, the server should be started with STDIO
+                communication. If not supplied, 'port' must be supplied.
+              '';
+            };
 
-          port = mkOption {
-            default = null;
-            type = nullOr port;
-            # type = nullOr (numbers.between 1 65535);
-            description = ''
-              (number, optional): If supplied, ycmd will connect to the server
-              at 'localhost:<port>' using TCP (remote servers are not
-              supported).
-            '';
-          };
+            port = mkOption {
+              default = null;
+              type = nullOr port;
+              # type = nullOr (numbers.between 1 65535);
+              description = ''
+                (number, optional): If supplied, ycmd will connect to the server
+                at 'localhost:<port>' using TCP (remote servers are not
+                supported).
+              '';
+            };
 
+            project_root_files = mkOption {
+              default = [ ];
+              type = listOf nonEmptyStr;
+              description = ''
+                (list of string, optional): List of filenames to search for when
+                trying to determine the project's root. Uses python's pathlib for
+                glob matching.
+              '';
+            };
 
-          project_root_files = mkOption {
-            default = [];
-            type = listOf nonEmptyStr;
-            description = ''
-              (list of string, optional): List of filenames to search for when
-              trying to determine the project's root. Uses python's pathlib for
-              glob matching.
-            '';
-          };
-
-          capabilities = mkOption {
-            default = {};
-            type = attrs;
-            description = ''
-              (dict, optional): If supplied, this is a dictionary that is
-              merged with the LSP client capabilities reported to the language
-              server.  This can be used to enable or disable certain features,
-              such as the support for configuration sections
-              ('workspace/configuration').
-            '';
+            capabilities = mkOption {
+              default = { };
+              type = attrs;
+              description = ''
+                (dict, optional): If supplied, this is a dictionary that is
+                merged with the LSP client capabilities reported to the language
+                server.  This can be used to enable or disable certain features,
+                such as the support for configuration sections
+                ('workspace/configuration').
+              '';
+            };
           };
         };
-      };
     };
 
     ycm_extra_conf = mkOption {
       description = "Components of `.ycm_extra_conf.py` file";
-      default = {};
+      default = { };
       type = types.submodule {
         options = {
           settings = mkOption {
@@ -190,8 +196,6 @@ rec {
     };
   };
 
-  /**
-  */
   write = {
     # vim.rcSnippet = name: cfg: pkgs.writeTextFile {
     #   inherit name;
@@ -210,23 +214,23 @@ rec {
         > - "E501" because re-indenting fewer lines be faster for rebuilds
         > - "E231" because `convertTo.python.dictFromAttrs` does not pretty print
       */
-      ycm_extra_conf = {
-        name,
-        settings,
-        args ? {
-          flakeIgnore = [
-            "E201" "E202"
-            "E501"
-            "E231"
-          ];
-        }
-      }:
-      writePython3Bin name args ''
-        def Settings( **kwargs ):
-        ${concatStringsSep "\n" (builtins.map (x:
-        "    ${x}"
-        ) (remove "" (splitString "\n" settings)))}
-      '';
+      ycm_extra_conf =
+        {
+          name,
+          settings,
+          args ? {
+            flakeIgnore = [
+              "E201"
+              "E202"
+              "E501"
+              "E231"
+            ];
+          },
+        }:
+        writePython3Bin name args ''
+          def Settings( **kwargs ):
+          ${concatStringsSep "\n" (builtins.map (x: "    ${x}") (remove "" (splitString "\n" settings)))}
+        '';
 
     };
   };
@@ -260,35 +264,38 @@ rec {
       ```
     */
     python = rec {
-      dictFromAttrs = attrs:
-        "{${builtins.concatStringsSep "," (
-          attrValues (
-            mapAttrs (name: value:
-              ''"${name}":${valueFrom value}''
-            ) attrs)
-          )}}";
+      dictFromAttrs =
+        attrs:
+        "{${
+          builtins.concatStringsSep "," (
+            attrValues (mapAttrs (name: value: ''"${name}":${valueFrom value}'') attrs)
+          )
+        }}";
 
-      boolianFrom = value:
-        if value then "True"
-        else "False"
-        ;
+      boolianFrom = value: if value then "True" else "False";
 
-      listFrom = value:
-        "[${builtins.concatStringsSep "," (
-          map (x: valueFrom x) value
-        )}]";
+      listFrom = value: "[${builtins.concatStringsSep "," (map (x: valueFrom x) value)}]";
 
-      valueFrom = value:
-        if isAttrs value then "${dictFromAttrs value}"
-        else if isBool value then "${boolianFrom value}"
-        else if isList value then "${listFrom value}"
-        else if isString value then ''"${value}"''
-        else if isPath value then ''"${toString value}"''
-        else if isStorePath value then ''"${builtins.toStorePath value}"''
-        else if (isFloat value || isInt value) then "${toString value}"
-        else if typeOf value == "null" then "None"
-        else throw "Unexpected type: value -> '${value}' | type -> ${typeOf value}"
-        ;
+      valueFrom =
+        value:
+        if isAttrs value then
+          "${dictFromAttrs value}"
+        else if isBool value then
+          "${boolianFrom value}"
+        else if isList value then
+          "${listFrom value}"
+        else if isString value then
+          ''"${value}"''
+        else if isPath value then
+          ''"${toString value}"''
+        else if isStorePath value then
+          ''"${builtins.toStorePath value}"''
+        else if (isFloat value || isInt value) then
+          "${toString value}"
+        else if typeOf value == "null" then
+          "None"
+        else
+          throw "Unexpected type: value -> '${value}' | type -> ${typeOf value}";
     };
 
     /**
@@ -296,38 +303,40 @@ rec {
       special attention
     */
     vim = with lib; rec {
-      dictFromAttrs = attrs:
-        "{${builtins.concatStringsSep "," (
-          attrValues (
-            attrsets.mapAttrs (name: value:
-              ''"${name}":${valueFrom value}''
-            ) attrs)
-          )}}";
+      dictFromAttrs =
+        attrs:
+        "{${
+          builtins.concatStringsSep "," (
+            attrValues (attrsets.mapAttrs (name: value: ''"${name}":${valueFrom value}'') attrs)
+          )
+        }}";
 
-      boolianFrom = value:
-        if value then "v:true"
-        else "v:false"
-        ;
+      boolianFrom = value: if value then "v:true" else "v:false";
 
-      listFrom = value:
-        "[${builtins.concatStringsSep "," (
-          builtins.map (x: valueFrom x) value
-        )}]";
+      listFrom = value: "[${builtins.concatStringsSep "," (builtins.map (x: valueFrom x) value)}]";
 
-      valueFrom = value:
-        if isAttrs value then "${dictFromAttrs value}"
-        else if isBool value then "${boolianFrom value}"
-        else if isList value then "${listFrom value}"
-        else if isString value then ''"${value}"''
-        else if isPath value then ''"${builtins.toString value}"''
-        else if isStorePath value then ''"${builtins.toStorePath value}"''
-        else if (isFloat value || isInt value) then "${builtins.toString value}"
-        else if typeOf value == "null" then "v:null"
-        else throw "Unexpected type: value -> '${value}' | type -> ${typeOf value}"
-        ;
+      valueFrom =
+        value:
+        if isAttrs value then
+          "${dictFromAttrs value}"
+        else if isBool value then
+          "${boolianFrom value}"
+        else if isList value then
+          "${listFrom value}"
+        else if isString value then
+          ''"${value}"''
+        else if isPath value then
+          ''"${builtins.toString value}"''
+        else if isStorePath value then
+          ''"${builtins.toStorePath value}"''
+        else if (isFloat value || isInt value) then
+          "${builtins.toString value}"
+        else if typeOf value == "null" then
+          "v:null"
+        else
+          throw "Unexpected type: value -> '${value}' | type -> ${typeOf value}";
     };
   };
-
 
   /**
     ## Example declaration of module
@@ -356,34 +365,37 @@ rec {
     }
     ```
   */
-  mkModule = {
-    name,
-    lspConfig,
-    lspOptions ? {},
-    config,
-    # pkgs,
-    ...
-  }:
-  let
-    service = "ycm_examples";
-    # cfg = config.services.${service}.${name};
-  in
-  {
-    ## TODO: Enable following after PR is merged -- https://github.com/NixOS/nixpkgs/pull/430772/
-    # config.programs.vim.plugins = [ pkgs.vimPlugins.YouCompleteMe ];
+  mkModule =
+    {
+      name,
+      lspConfig,
+      lspOptions ? { },
+      config,
+      # pkgs,
+      ...
+    }:
+    let
+      service = "ycm_examples";
+      # cfg = config.services.${service}.${name};
+    in
+    {
+      ## TODO: Enable following after PR is merged -- https://github.com/NixOS/nixpkgs/pull/430772/
+      # config.programs.vim.plugins = [ pkgs.vimPlugins.YouCompleteMe ];
 
-    config.programs.vim.enable = true;
+      config.programs.vim.enable = true;
 
-    options.services.${service}.${name} = {
-      inherit (options) enable ycm-lsp-server ycm_extra_conf;
-    } // lspOptions;
+      options.services.${service}.${name} = {
+        inherit (options) enable ycm-lsp-server ycm_extra_conf;
+      }
+      // lspOptions;
 
-    # config.services.${service}.${name} = mkIf cfg.enable {
-    #   enable = mkDefault false;
-    # } // lspConfig;
-    ## TODO: swap below for above when infinite recursion errors are sorted
-    config.services.${service}.${name} = {
-      enable = mkDefault false;
-    } // lspConfig;
-  };
+      # config.services.${service}.${name} = mkIf cfg.enable {
+      #   enable = mkDefault false;
+      # } // lspConfig;
+      ## TODO: swap below for above when infinite recursion errors are sorted
+      config.services.${service}.${name} = {
+        enable = mkDefault false;
+      }
+      // lspConfig;
+    };
 }

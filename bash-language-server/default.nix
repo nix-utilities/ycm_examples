@@ -16,8 +16,10 @@ utils.mkModule rec {
     ycm-lsp-server = {
       name = "bash";
       filetypes = [ "sh" ];
-      cmdline = [ "${pkgs.bash-language-server}/bin/${name}" "start" ];
+      cmdline = [
+        "${pkgs.bash-language-server}/bin/${name}"
+        "start"
+      ];
     };
   };
 }
-

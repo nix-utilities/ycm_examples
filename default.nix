@@ -12,10 +12,8 @@ let
 
   utils = import ./utils.nix { inherit lib pkgs; };
 
-  list_ycm_extra_conf_attrs = builtins.filter (x:
-    x ? "ycm_extra_conf"
-    && x.ycm_extra_conf ? "settings"
-    && x.ycm_extra_conf.settings != null
+  list_ycm_extra_conf_attrs = builtins.filter (
+    x: x ? "ycm_extra_conf" && x.ycm_extra_conf ? "settings" && x.ycm_extra_conf.settings != null
   ) cfg.enabled;
 in
 {
@@ -37,7 +35,7 @@ in
 
   options.services.${service} = {
     enabled = lib.mkOption {
-      default = [];
+      default = [ ];
       description = "Automaticly append listed LSP servers to `config.programs.vim.extraConfig`";
       type = lib.types.listOf lib.types.attrs;
     };
@@ -53,9 +51,9 @@ in
       type = lib.types.pathInStore;
       default = utils.write.python.ycm_extra_conf {
         name = "ycm_extra_conf.py";
-        settings = builtins.concatStringsSep "\n" (builtins.map (x:
-          x.ycm_extra_conf.settings
-        ) list_ycm_extra_conf_attrs);
+        settings = builtins.concatStringsSep "\n" (
+          builtins.map (x: x.ycm_extra_conf.settings) list_ycm_extra_conf_attrs
+        );
       };
     };
   };
@@ -66,6 +64,5 @@ in
     ''
     + lib.optionalString (builtins.length list_ycm_extra_conf_attrs > 0) ''
       let g:ycm_global_ycm_extra_conf = "${cfg.ycm_extra_conf}/bin/ycm_extra_conf.py"
-    ''
-    ;
+    '';
 }

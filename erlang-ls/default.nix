@@ -16,9 +16,15 @@ utils.mkModule rec {
     ycm-lsp-server = {
       name = "erlang";
       filetypes = [ "erlang" ];
-      cmdline = [ "${pkgs.erlang-ls}/bin/erlang_ls" "--transport" "stdio" ];
-      project_root_files = [ "erlang_ls.config" "erlang_ls.yaml" ];
+      cmdline = [
+        "${pkgs.erlang-ls}/bin/erlang_ls"
+        "--transport"
+        "stdio"
+      ];
+      project_root_files = [
+        "erlang_ls.config"
+        "erlang_ls.yaml"
+      ];
     };
   };
 }
-

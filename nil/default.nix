@@ -16,14 +16,20 @@ utils.mkModule rec {
     ycm-lsp-server = {
       name = "nix";
       filetypes = [ "nix" ];
-      cmdline = [ "${pkgs.nil}/bin/${name}" "--stdio" ];
+      cmdline = [
+        "${pkgs.nil}/bin/${name}"
+        "--stdio"
+      ];
       project_root_files = [ "flake.nix" ];
     };
 
     ycm_extra_conf.settings =
       let
         dict = utils.convertTo.python.dictFromAttrs {
-          ls.nil.formatting.command = ["nix" "fmt"];
+          ls.nil.formatting.command = [
+            "nix"
+            "fmt"
+          ];
         };
       in
       ''
@@ -32,4 +38,3 @@ utils.mkModule rec {
       '';
   };
 }
-

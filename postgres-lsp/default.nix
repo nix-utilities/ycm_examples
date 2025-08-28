@@ -17,7 +17,10 @@ utils.mkModule rec {
     ycm-lsp-server = {
       name = "sql";
       filetypes = [ "sql" ];
-      cmdline = [ "${pkgs.postgres-lsp}/bin/postgrestools" "lsp-proxy" ];
+      cmdline = [
+        "${pkgs.postgres-lsp}/bin/postgrestools"
+        "lsp-proxy"
+      ];
       project_root_files = [ "postgrestools.jsonc" ];
     };
   };

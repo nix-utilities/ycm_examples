@@ -16,8 +16,11 @@ utils.mkModule rec {
     ycm-lsp-server = {
       name = "docker";
       filetypes = [ "dockerfile" ];
-      cmdline = [ "${pkgs.docker-language-server}/bin/${name}" "start" "--stdio" ];
+      cmdline = [
+        "${pkgs.docker-language-server}/bin/${name}"
+        "start"
+        "--stdio"
+      ];
     };
   };
 }
-

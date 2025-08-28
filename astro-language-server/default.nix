@@ -16,8 +16,14 @@ utils.mkModule rec {
     ycm-lsp-server = {
       name = "astro";
       filetypes = [ "astro" ];
-      cmdline = [ "${pkgs.astro-language-server}/bin/astro-ls" "--stdio" ];
-      project_root_files = [ "tsconfig.json" "astro.config.mjs" ];
+      cmdline = [
+        "${pkgs.astro-language-server}/bin/astro-ls"
+        "--stdio"
+      ];
+      project_root_files = [
+        "tsconfig.json"
+        "astro.config.mjs"
+      ];
     };
 
     ycm_extra_conf.settings =

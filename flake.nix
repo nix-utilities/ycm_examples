@@ -21,14 +21,15 @@
       defaultModules = nixpkgs.lib.listToAttrs (
         builtins.map (system: {
           name = system;
-          value = {
-            pkgs ? nixpkgs.legacyPackages.${system},
-            lib ? nixpkgs.lib,
-            ...
-          }:
-          {
-            imports = [ ./default.nix ];
-          };
+          value =
+            {
+              pkgs ? nixpkgs.legacyPackages.${system},
+              lib ? nixpkgs.lib,
+              ...
+            }:
+            {
+              imports = [ ./default.nix ];
+            };
         }) system.supported.modules
       );
     in

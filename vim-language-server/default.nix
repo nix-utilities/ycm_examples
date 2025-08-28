@@ -15,8 +15,14 @@ utils.mkModule rec {
   lspConfig = {
     ycm-lsp-server = {
       name = "vim";
-      filetypes = [ "vim" "help" ];
-      cmdline = [ "${pkgs.vim-language-server}/bin/${name}" "--stdio" ];
+      filetypes = [
+        "vim"
+        "help"
+      ];
+      cmdline = [
+        "${pkgs.vim-language-server}/bin/${name}"
+        "--stdio"
+      ];
     };
   };
 }
