@@ -59,16 +59,12 @@ in
     };
   };
 
-  ## TODO: maybe be smorter about this
   config.programs.vim.extraConfig =
-    if builtins.length cfg.enabled > 0 && builtins.length list_ycm_extra_conf_attrs > 0 then
-      ''
+    lib.optionalString (builtins.length cfg.enabled > 0) ''
       let g:ycm_language_server = extend(get(g:, 'ycm_language_server', []), [ ${cfg.ycm-lsp-server} ])
+    ''
+    + lib.optionalString (builtins.length list_ycm_extra_conf_attrs > 0) ''
       let g:ycm_global_ycm_extra_conf = "${cfg.ycm_extra_conf}/bin/ycm_extra_conf.py"
-      ''
-    else if builtins.length cfg.enabled > 0 then
-      ''
-      let g:ycm_language_server = extend(get(g:, 'ycm_language_server', []), [ ${cfg.ycm-lsp-server} ])
-      ''
-    else "";
+    ''
+    ;
 }
