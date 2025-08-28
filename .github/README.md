@@ -396,7 +396,7 @@ utils.mkModule rec {
 ```bash
 cd ~/git/hub/nix-utilities/ycm_examples
 
-git commit -m "Add Astro language server"
+git commit -m "astro-language-server: Add language server"
 
 git push fork main
 ```
