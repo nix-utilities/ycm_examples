@@ -447,6 +447,7 @@ ______
 - `./awk-language-server` error, `"POST /run_completer_command HTTP/1.1" 500`
 - `./bash-language-server` **works**
 - `./docker-language-server` **works** _mostly_, provides basic syntax checking
+- `./dockerfile-language-server-nodejs` **works**, and provides `GetHover` docs too, unlike `./docker-language-server`
 - `./erlang-ls` **works**
 - `./haskell-language-server` error, may need investigation by Haskell expert
 - `./nil` **works** though may slow-down initial load
