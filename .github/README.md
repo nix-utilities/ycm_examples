@@ -452,7 +452,9 @@ ______
 - `./haskell-language-server` error, may need investigation by Haskell expert
 - `./nil` **works** though may slow-down initial load
 - `./pest` **works**
-- `./postgres-lsp` error, might need Docker or other dependencies injected
+- `./postgres-lsp` error, might need Docker or other dependencies injected, and
+  checking the [configuration](https://pgtools.dev/latest/#configuration)
+  documentation maybe wise
 - `./vim-language-server` **works**
 - `./vscode-css-languageserver` **works**
 - `./vscode-json-languageserver` no errors or server rejections but doesn't seem to do anything
