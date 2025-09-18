@@ -22,6 +22,7 @@ in
     ./awk-language-server
     ./bash-language-server
     ./docker-language-server
+    ./dockerfile-language-server
     ./dockerfile-language-server-nodejs
     ./erlang-ls
     ./haskell-language-server
