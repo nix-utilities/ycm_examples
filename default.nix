@@ -29,6 +29,7 @@ in
     ./nil
     ./pest-ide-tools
     ./postgres-lsp
+    ./typescript-language-server
     ./vim-language-server
     ./vscode-css-languageserver
     ./vscode-json-languageserver

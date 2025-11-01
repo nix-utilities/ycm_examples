@@ -455,6 +455,8 @@ ______
 - `./postgres-lsp` error, might need Docker or other dependencies injected, and
   checking the [configuration](https://pgtools.dev/latest/#configuration)
   documentation maybe wise
+- `./typescript-language-server` **works** not to be confused with `tsserver`
+  bundled with `ycmd` which does not seem to work as of 2025-10-31
 - `./vim-language-server` **works**
 - `./vscode-css-languageserver` **works**
 - `./vscode-json-languageserver` no errors or server rejections but doesn't seem to do anything
